@@ -22,7 +22,7 @@ select {
 }
 
 main {
-  width: min(680px, calc(100% - 24px));
+  width: min(1100px, calc(100% - 32px));
   margin: 24px auto;
   padding: 28px;
   border-radius: 18px;
@@ -125,6 +125,7 @@ input[type="color"] {
 
 .models-grid {
   display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 14px;
 }
 
@@ -133,6 +134,7 @@ input[type="color"] {
 }
 
 .model-card {
+  min-width: 0;
   padding: 16px;
   border: 1px solid #dce2ea;
   border-radius: 12px;
@@ -153,7 +155,7 @@ input[type="color"] {
 
 .channel-row {
   display: grid;
-  grid-template-columns: 22px 1fr 72px;
+  grid-template-columns: 22px 1fr 88px;
   gap: 10px;
   align-items: center;
 }
@@ -228,11 +230,14 @@ input[type="color"] {
 }
 
 .number-input input {
+  flex: 1;
+  min-width: 0;
   width: 100%;
   text-align: center;
 }
 
 .number-input span {
+  flex-shrink: 0;
   color: #687482;
   font-size: 12px;
 }
@@ -250,7 +255,13 @@ input[type="color"] {
   }
 
   .channel-row {
-    grid-template-columns: 20px 1fr 68px;
+    grid-template-columns: 20px 1fr 80px;
     gap: 7px;
+  }
+}
+
+@media (max-width: 850px) {
+  .models-grid {
+    grid-template-columns: 1fr;
   }
 }
