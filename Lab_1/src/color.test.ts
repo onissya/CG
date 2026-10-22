@@ -3,11 +3,9 @@ import {
   cmykToRgb,
   hexToRgb,
   hlsToRgb,
-  hsvToRgb,
   rgbToCmyk,
   rgbToHex,
   rgbToHls,
-  rgbToHsv,
   type RGB,
 } from "./color";
 
@@ -36,17 +34,12 @@ describe("цветовые преобразования", () => {
     samples.forEach((sample) => expectRgbClose(cmykToRgb(rgbToCmyk(sample)), sample));
   });
 
-  it("сохраняет цвет после цикла RGB → HSV → RGB", () => {
-    samples.forEach((sample) => expectRgbClose(hsvToRgb(rgbToHsv(sample)), sample));
-  });
-
   it("сохраняет цвет после цикла RGB → HLS → RGB", () => {
     samples.forEach((sample) => expectRgbClose(hlsToRgb(rgbToHls(sample)), sample));
   });
 
   it("обрабатывает контрольные значения", () => {
     expect(rgbToCmyk({ r: 0, g: 0, b: 0 })).toEqual({ c: 0, m: 0, y: 0, k: 100 });
-    expect(hsvToRgb({ h: 120, s: 100, v: 100 })).toEqual({ r: 0, g: 255, b: 0 });
     expect(hlsToRgb({ h: 240, l: 50, s: 100 })).toEqual({ r: 0, g: 0, b: 255 });
   });
 });

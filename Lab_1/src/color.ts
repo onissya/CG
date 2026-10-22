@@ -1,6 +1,5 @@
 export type RGB = { r: number; g: number; b: number };
 export type CMYK = { c: number; m: number; y: number; k: number };
-export type HSV = { h: number; s: number; v: number };
 export type HLS = { h: number; l: number; s: number };
 
 export const clamp = (value: number, min: number, max: number): number =>
@@ -80,22 +79,6 @@ function rgbToHue(red: number, green: number, blue: number, delta: number, max: 
   return 60 * ((red - green) / delta + 4);
 }
 
-export function rgbToHsv(rgb: RGB): HSV {
-  const { r, g, b } = normalizeRgb(rgb);
-  const red = r / 255;
-  const green = g / 255;
-  const blue = b / 255;
-  const max = Math.max(red, green, blue);
-  const min = Math.min(red, green, blue);
-  const delta = max - min;
-
-  return {
-    h: normalizeHue(rgbToHue(red, green, blue, delta, max)),
-    s: max === 0 ? 0 : (delta / max) * 100,
-    v: max * 100,
-  };
-}
-
 function hueToRgb(hue: number, saturation: number, lightComponent: number): RGB {
   const sector = normalizeHue(hue) / 60;
   const x = saturation * (1 - Math.abs((sector % 2) - 1));
@@ -116,13 +99,6 @@ function hueToRgb(hue: number, saturation: number, lightComponent: number): RGB 
     g: (green + lightComponent) * 255,
     b: (blue + lightComponent) * 255,
   });
-}
-
-export function hsvToRgb({ h, s, v }: HSV): RGB {
-  const saturation = clamp(s, 0, 100) / 100;
-  const value = clamp(v, 0, 100) / 100;
-  const chroma = value * saturation;
-  return hueToRgb(h, chroma, value - chroma);
 }
 
 export function rgbToHls(rgb: RGB): HLS {

@@ -3,18 +3,15 @@ import {
   cmykToRgb,
   hexToRgb,
   hlsToRgb,
-  hsvToRgb,
   normalizeRgb,
   rgbToCmyk,
   rgbToHex,
   rgbToHls,
-  rgbToHsv,
   round,
   type RGB,
 } from "./color";
 
-type Model = "rgb" | "cmyk" | "hsv" | "hls";
-type Variant = "hsv" | "hls";
+type Model = "rgb" | "cmyk" | "hls";
 
 type Channel = {
   key: string;
@@ -36,11 +33,6 @@ const channels: Record<Model, Channel[]> = {
     { key: "y", name: "Жёлтый", min: 0, max: 100, unit: "%" },
     { key: "k", name: "Чёрный", min: 0, max: 100, unit: "%" },
   ],
-  hsv: [
-    { key: "h", name: "Тон", min: 0, max: 360, unit: "°" },
-    { key: "s", name: "Насыщенность", min: 0, max: 100, unit: "%" },
-    { key: "v", name: "Яркость", min: 0, max: 100, unit: "%" },
-  ],
   hls: [
     { key: "h", name: "Тон", min: 0, max: 360, unit: "°" },
     { key: "l", name: "Светлота", min: 0, max: 100, unit: "%" },
@@ -49,7 +41,6 @@ const channels: Record<Model, Channel[]> = {
 };
 
 let rgb: RGB = { r: 103, g: 80, b: 164 };
-const variant: Variant = "hls";
 
 const app = document.querySelector<HTMLDivElement>("#app");
 if (!app) throw new Error("Корневой элемент #app не найден");
@@ -59,8 +50,9 @@ function channelRows(model: Model): string {
     .map(
       ({ key, name, min, max, unit }) => `
         <div class="channel-row">
-          <label for="${model}-${key}-number">
-            <b title="${name}">${key.toUpperCase()}</b>
+          <label class="channel-label" for="${model}-${key}-number">
+            <b>${key.toUpperCase()}</b>
+            <span>${name}</span>
           </label>
           <input
             class="range-${model}-${key}"
@@ -106,7 +98,7 @@ app.innerHTML = `
       <h1>Лабораторная 1: Цветовые модели</h1>
     </header>
 
-    <section class="color-workbench" aria-label="Выбор цвета и варианта">
+    <section class="color-workbench" aria-label="Выбор цвета">
       <div class="color-preview" id="color-preview">
         <span id="preview-hex">#6750A4</span>
       </div>
@@ -127,7 +119,7 @@ app.innerHTML = `
     <section class="models-grid" aria-label="Компоненты цветовых моделей">
       ${modelCard("rgb")}
       ${modelCard("cmyk")}
-      <div id="variant-card">${modelCard("hls")}</div>
+      ${modelCard("hls")}
     </section>
   </main>
 `;
@@ -141,12 +133,10 @@ function requiredElement<T extends Element>(selector: string): T {
 const colorPicker = requiredElement<HTMLInputElement>("#color-picker");
 const hexInput = requiredElement<HTMLInputElement>("#hex-input");
 const previewHex = requiredElement<HTMLSpanElement>("#preview-hex");
-const variantCard = requiredElement<HTMLDivElement>("#variant-card");
 
 function valuesFor(model: Model): Record<string, number> {
   if (model === "rgb") return rgb;
   if (model === "cmyk") return rgbToCmyk(rgb);
-  if (model === "hsv") return rgbToHsv(rgb);
   return rgbToHls(rgb);
 }
 
@@ -157,7 +147,7 @@ function render(): void {
   hexInput.value = hex;
   previewHex.textContent = hex;
 
-  (["rgb", "cmyk", variant] as Model[]).forEach((model) => {
+  (["rgb", "cmyk", "hls"] as Model[]).forEach((model) => {
     const values = valuesFor(model);
     channels[model].forEach(({ key }) => {
       const value = round(values[key], model === "rgb" ? 0 : 1);
@@ -187,7 +177,6 @@ function updateFromModel(model: Model): void {
 
   if (model === "rgb") rgb = normalizeRgb(values as RGB);
   if (model === "cmyk") rgb = cmykToRgb(values as { c: number; m: number; y: number; k: number });
-  if (model === "hsv") rgb = hsvToRgb(values as { h: number; s: number; v: number });
   if (model === "hls") rgb = hlsToRgb(values as { h: number; l: number; s: number });
   render();
 }
