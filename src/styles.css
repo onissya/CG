@@ -67,7 +67,7 @@ h1 {
 
 .color-controls {
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: minmax(0, 1fr) auto;
   gap: 12px;
 }
 
@@ -79,6 +79,20 @@ h1 {
   font-size: 12px;
   font-weight: 700;
   letter-spacing: 0.04em;
+}
+
+.palette-field > span {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+}
+
+.palette-field small {
+  color: #8993a0;
+  font-size: 11px;
+  font-weight: 400;
+  letter-spacing: 0;
+  text-transform: none;
 }
 
 select,
@@ -112,6 +126,7 @@ input[type="color"] {
 }
 
 #hex-input {
+  width: 120px;
   text-transform: uppercase;
 }
 
@@ -121,6 +136,10 @@ input[type="color"] {
 
 .variant-select {
   width: 100%;
+}
+
+.hex-field {
+  width: 120px;
 }
 
 .models-grid {
@@ -179,7 +198,7 @@ input[type="color"] {
   width: 18px;
   height: 18px;
   border: 2px solid #465563;
-  border-radius: 0;
+  border-radius: 50%;
   appearance: none;
   background: #fff;
 }
@@ -188,7 +207,7 @@ input[type="color"] {
   width: 14px;
   height: 14px;
   border: 2px solid #465563;
-  border-radius: 0;
+  border-radius: 50%;
   background: #fff;
 }
 
@@ -252,6 +271,10 @@ input[type="color"] {
 
   .color-controls {
     grid-template-columns: 1fr;
+  }
+
+  .hex-field {
+    width: 100%;
   }
 
   .channel-row {

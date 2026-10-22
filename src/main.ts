@@ -112,13 +112,13 @@ app.innerHTML = `
       </div>
 
       <div class="color-controls">
-        <label>
+        <label class="palette-field">
+          <span>ПАЛИТРА <small>Нажмите на поле, чтобы выбрать цвет</small></span>
+          <input id="color-picker" type="color" value="#6750A4" title="Нажмите, чтобы открыть палитру" />
+        </label>
+        <label class="hex-field">
           <span>HEX</span>
           <input id="hex-input" type="text" value="#6750A4" maxlength="7" spellcheck="false" />
-        </label>
-        <label>
-          <span>ПАЛИТРА</span>
-          <input id="color-picker" type="color" value="#6750A4" />
         </label>
       </div>
 
