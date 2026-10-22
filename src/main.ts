@@ -60,9 +60,10 @@ function channelRows(model: Model): string {
       ({ key, name, min, max, unit }) => `
         <div class="channel-row">
           <label for="${model}-${key}-number">
-            <b>${key.toUpperCase()}</b> — ${name}
+            <b title="${name}">${key.toUpperCase()}</b>
           </label>
           <input
+            class="range-${model}-${key}"
             id="${model}-${key}-range"
             type="range"
             min="${min}"
@@ -103,31 +104,31 @@ app.innerHTML = `
   <main>
     <header>
       <h1>Цветовые модели</h1>
-      <p>Лабораторная работа №1</p>
     </header>
 
-    <section class="controls" aria-label="Выбор цвета и варианта">
+    <section class="color-workbench" aria-label="Выбор цвета и варианта">
+      <div class="color-preview" id="color-preview">
+        <span id="preview-hex">#6750A4</span>
+      </div>
+
+      <div class="color-controls">
+        <label>
+          <span>HEX</span>
+          <input id="hex-input" type="text" value="#6750A4" maxlength="7" spellcheck="false" />
+        </label>
+        <label>
+          <span>ПАЛИТРА</span>
+          <input id="color-picker" type="color" value="#6750A4" />
+        </label>
+      </div>
+
       <label class="variant-select">
-        <span>Вариант:</span>
+        <span>Вариант</span>
         <select id="variant-select">
           <option value="hsv">Чётный — CMYK, RGB, HSV</option>
           <option value="hls">Нечётный — CMYK, RGB, HLS</option>
         </select>
       </label>
-
-      <div class="color-controls">
-        <div class="color-preview" id="color-preview">
-          <span id="preview-hex">#6750A4</span>
-        </div>
-        <label>
-          <span>Палитра:</span>
-          <input id="color-picker" type="color" value="#6750A4" />
-        </label>
-        <label>
-          <span>HEX:</span>
-          <input id="hex-input" type="text" value="#6750A4" maxlength="7" spellcheck="false" />
-        </label>
-      </div>
     </section>
 
     <section class="models-grid" aria-label="Компоненты цветовых моделей">
