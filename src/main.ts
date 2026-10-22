@@ -49,7 +49,7 @@ const channels: Record<Model, Channel[]> = {
 };
 
 let rgb: RGB = { r: 103, g: 80, b: 164 };
-let variant: Variant = "hsv";
+const variant: Variant = "hls";
 
 const app = document.querySelector<HTMLDivElement>("#app");
 if (!app) throw new Error("Корневой элемент #app не найден");
@@ -103,7 +103,7 @@ function modelCard(model: Model): string {
 app.innerHTML = `
   <main>
     <header>
-      <h1>Цветовые модели</h1>
+      <h1>Лабораторная 1: Цветовые модели</h1>
     </header>
 
     <section class="color-workbench" aria-label="Выбор цвета и варианта">
@@ -122,19 +122,12 @@ app.innerHTML = `
         </label>
       </div>
 
-      <label class="variant-select">
-        <span>Вариант</span>
-        <select id="variant-select">
-          <option value="hsv">Чётный — CMYK, RGB, HSV</option>
-          <option value="hls">Нечётный — CMYK, RGB, HLS</option>
-        </select>
-      </label>
     </section>
 
     <section class="models-grid" aria-label="Компоненты цветовых моделей">
       ${modelCard("rgb")}
       ${modelCard("cmyk")}
-      <div id="variant-card">${modelCard("hsv")}</div>
+      <div id="variant-card">${modelCard("hls")}</div>
     </section>
   </main>
 `;
@@ -149,7 +142,6 @@ const colorPicker = requiredElement<HTMLInputElement>("#color-picker");
 const hexInput = requiredElement<HTMLInputElement>("#hex-input");
 const previewHex = requiredElement<HTMLSpanElement>("#preview-hex");
 const variantCard = requiredElement<HTMLDivElement>("#variant-card");
-const variantSelect = requiredElement<HTMLSelectElement>("#variant-select");
 
 function valuesFor(model: Model): Record<string, number> {
   if (model === "rgb") return rgb;
@@ -229,13 +221,6 @@ function applyHex(value: string): void {
 
 colorPicker.addEventListener("input", () => applyHex(colorPicker.value));
 hexInput.addEventListener("input", () => applyHex(hexInput.value));
-
-variantSelect.addEventListener("change", () => {
-  variant = variantSelect.value as Variant;
-  variantCard.innerHTML = modelCard(variant);
-  bindChannelInputs(variantCard);
-  render();
-});
 
 bindChannelInputs();
 render();
