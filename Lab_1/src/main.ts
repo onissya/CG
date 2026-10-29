@@ -60,7 +60,7 @@ function channelRows(model: Model): string {
             type="range"
             min="${min}"
             max="${max}"
-            step="1"
+            step="${model === "rgb" ? 1 : 0.1}"
             data-model="${model}"
             data-channel="${key}"
             data-kind="range"
@@ -140,7 +140,11 @@ function valuesFor(model: Model): Record<string, number> {
   return rgbToHls(rgb);
 }
 
-function render(): void {
+function render(
+  sourceModel?: Model,
+  sourceValues?: Record<string, number>,
+  activeInput?: HTMLInputElement,
+): void {
   const hex = rgbToHex(rgb);
   document.documentElement.style.setProperty("--selected-color", hex);
   colorPicker.value = hex;
@@ -148,12 +152,12 @@ function render(): void {
   previewHex.textContent = hex;
 
   (["rgb", "cmyk", "hls"] as Model[]).forEach((model) => {
-    const values = valuesFor(model);
+    const values = model === sourceModel && sourceValues ? sourceValues : valuesFor(model);
     channels[model].forEach(({ key }) => {
       const value = round(values[key], model === "rgb" ? 0 : 1);
       const numberInput = document.querySelector<HTMLInputElement>(`#${model}-${key}-number`);
       const rangeInput = document.querySelector<HTMLInputElement>(`#${model}-${key}-range`);
-      if (numberInput) numberInput.value = String(value);
+      if (numberInput && numberInput !== activeInput) numberInput.value = String(value);
       if (rangeInput) rangeInput.value = String(value);
     });
   });
@@ -171,14 +175,14 @@ function readModel(model: Model): Record<string, number> | null {
   return values;
 }
 
-function updateFromModel(model: Model): void {
+function updateFromModel(model: Model, activeInput?: HTMLInputElement): void {
   const values = readModel(model);
   if (!values) return;
 
   if (model === "rgb") rgb = normalizeRgb(values as RGB);
   if (model === "cmyk") rgb = cmykToRgb(values as { c: number; m: number; y: number; k: number });
   if (model === "hls") rgb = hlsToRgb(values as { h: number; l: number; s: number });
-  render();
+  render(model, values, activeInput);
 }
 
 function bindChannelInputs(container: ParentNode = document): void {
@@ -192,7 +196,7 @@ function bindChannelInputs(container: ParentNode = document): void {
       const twinKind = kind === "range" ? "number" : "range";
       const twin = document.querySelector<HTMLInputElement>(`#${model}-${channel}-${twinKind}`);
       if (twin) twin.value = input.value;
-      updateFromModel(model);
+      updateFromModel(model, kind === "number" ? input : undefined);
     });
   });
 }
