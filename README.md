@@ -15,3 +15,10 @@ cd Lab_1
 npm install
 npm run dev
 ```
+## Запуск лабораторной 2
+
+```bash
+cd Lab_2
+npm install
+npm run dev
+```
