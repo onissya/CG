@@ -98,7 +98,7 @@ app.innerHTML = `
         <article><h3>Средний фильтр</h3><p>Каждый пиксель заменяется средним по окну. Шум уменьшается, но границы становятся мягче.</p><code>g(x,y) = 1/N · Σ f(i,j)</code></article>
         <article><h3>Фильтр Гаусса</h3><p>Ближайшие пиксели имеют больший вес. Изображение получается сглаженным без резких переходов.</p><code>G(x,y) = e−(x²+y²)/2σ²</code></article>
         <article><h3>Эрозия и дилатация</h3><p>Эрозия уменьшает светлые области, а дилатация увеличивает их.</p><code>erosion = min(S), dilation = max(S)</code></article>
-        <article><h3>Открытие и закрытие</h3><p>Открытие убирает маленькие объекты. Закрытие заполняет маленькие отверстия.</p><code>open = dilation(erosion)</code></article>
+        <article><h3>Открытие и закрытие</h3><p>Открытие убирает маленькие объекты. Закрытие заполняет маленькие отверстия.</p><code>opening = dilation(erosion)<br>closing = erosion(dilation)</code></article>
       </div>
     </section>
     <footer>Лабораторная работа №2 · Вариант 17 · TypeScript / Canvas API</footer>
