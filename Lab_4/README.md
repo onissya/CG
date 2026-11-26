@@ -12,6 +12,13 @@ npm install
 npm run dev
 ```
 
+Если используется pnpm:
+
+```bash
+pnpm install
+pnpm run dev
+```
+
 После запуска откройте адрес Vite, обычно `http://localhost:5173`.
 
 ## Проверка
